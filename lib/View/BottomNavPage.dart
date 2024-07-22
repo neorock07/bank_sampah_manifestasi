@@ -1,0 +1,54 @@
+import 'package:bank_sampah/View/HomeActivity.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+
+
+class BottomNavPage extends StatefulWidget {
+  const BottomNavPage({Key? key}) : super(key: key);
+
+  @override
+  _BottomNavPageState createState() => _BottomNavPageState();
+}
+
+class _BottomNavPageState extends State<BottomNavPage> {
+  var selectedTab = 0.obs;
+
+  _setPage(int index) {
+    selectedTab.value = index;
+  }
+
+  List _pages = [
+    HomeActivity()
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => Scaffold(
+          body: _pages[selectedTab.value],
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: selectedTab.value,
+              onTap: (index) => _setPage(index),
+              selectedItemColor: Color.fromRGBO(48, 122, 89, 1),
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              unselectedItemColor: Colors.grey,
+              selectedLabelStyle: const TextStyle(
+                  fontFamily: "Poppins", color: Color.fromRGBO(48, 122, 89, 1)),
+              unselectedLabelStyle:
+                  const TextStyle(fontFamily: "Poppins", color: Colors.grey),
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(LucideIcons.home), label: "Beranda"),
+                BottomNavigationBarItem(
+                    icon: Icon(LucideIcons.menuSquare), label: "Menu"),
+                BottomNavigationBarItem(
+                    icon: Icon(LucideIcons.heartHandshake), label: "Donasi"),
+                BottomNavigationBarItem(
+                    icon: Icon(LucideIcons.boxes), label: "Inventory"),
+                BottomNavigationBarItem(
+                    icon: Icon(LucideIcons.user), label: "Profile"),
+              ]),
+        ));
+  }
+}
