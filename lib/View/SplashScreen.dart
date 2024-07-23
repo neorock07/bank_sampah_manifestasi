@@ -32,9 +32,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
        value: SystemUiOverlayStyle.light.copyWith(
-        statusBarColor: Color.fromRGBO(70, 178, 133, 1),
-        systemNavigationBarColor: Color.fromRGBO(70, 178, 133, 1),
-        systemNavigationBarDividerColor: Color.fromRGBO(70, 178, 133, 1),
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Color.fromRGBO(176, 201, 177, 1),
+        systemNavigationBarDividerColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(

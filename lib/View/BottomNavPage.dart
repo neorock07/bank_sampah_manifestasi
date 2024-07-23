@@ -1,4 +1,7 @@
+import 'package:bank_sampah/View/HistoryActivity.dart';
 import 'package:bank_sampah/View/HomeActivity.dart';
+import 'package:bank_sampah/View/ReportActivity.dart';
+import 'package:bank_sampah/View/ShopActivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -19,12 +22,22 @@ class _BottomNavPageState extends State<BottomNavPage> {
   }
 
   List _pages = [
-    HomeActivity()
+    HomeActivity(),
+    ShopActivity(),
+    ReportActivity(),
+    HistoryActivity(),
+    HistoryActivity()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton(
+            onPressed: (){},
+            backgroundColor: Colors.white,
+            child: Icon(Icons.call, color: Colors.black,),
+            ),
           body: _pages[selectedTab.value],
           bottomNavigationBar: BottomNavigationBar(
               currentIndex: selectedTab.value,
@@ -39,15 +52,19 @@ class _BottomNavPageState extends State<BottomNavPage> {
                   const TextStyle(fontFamily: "Poppins", color: Colors.grey),
               items: const [
                 BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.home), label: "Beranda"),
+                    icon: Icon(LucideIcons.home), label: ""),
                 BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.menuSquare), label: "Menu"),
+                    icon: Icon(LucideIcons.shoppingCart), label: ""),
+                
                 BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.heartHandshake), label: "Donasi"),
+                    icon: Icon(LucideIcons.shoppingCart, color: Colors.white,), label: ""),
+                
                 BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.boxes), label: "Inventory"),
+                    icon: Icon(Icons.notification_add), label: ""),
                 BottomNavigationBarItem(
-                    icon: Icon(LucideIcons.user), label: "Profile"),
+                    icon: Icon(LucideIcons.history), label: ""),
+                // BottomNavigationBarItem(
+                //     icon: Icon(LucideIcons.user), label: ""),
               ]),
         ));
   }

@@ -15,7 +15,7 @@ class HomeActivity extends StatefulWidget {
 }
 
 class _HomeActivityState extends State<HomeActivity> {
-  var chartController = Get.put(HomeChartController());
+  HomeChartController chartController = Get.put(HomeChartController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _HomeActivityState extends State<HomeActivity> {
                                 fontSize: 20.sp,
                               ),
                             ),
-                            CircleAvatar(
+                            const CircleAvatar(
                               backgroundImage:
                                   AssetImage("assets/images/sd.jpeg"),
                             )
@@ -81,12 +81,23 @@ class _HomeActivityState extends State<HomeActivity> {
                     SizedBox(
                       height: 30.h,
                     ),
-                    DashboardCard(context),
+                    DashboardCard(context, background: Colors.white),
                     SizedBox(
                       height: 5.h,
                     ),
-                    HomeButton(context,
-                        label: "Penjemputan", asset: "assets/images/motor.png"),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        splashColor: Colors.grey,
+                        hoverColor: Colors.grey,
+                        onTap: () {
+                          Navigator.pushNamed(context, "/penjemputan");
+                        },
+                        child: HomeButton(context,
+                            label: "Penjemputan",
+                            asset: "assets/images/motor.png"),
+                      ),
+                    ),
                     SizedBox(height: 5.h),
                     HomeButton(context,
                         label: "Penukaran Poin",
@@ -96,16 +107,17 @@ class _HomeActivityState extends State<HomeActivity> {
                         label: "Berita", asset: "assets/images/news.png"),
                     SizedBox(height: 5.h),
                     Obx(() => Padding(
-                      padding: EdgeInsets.only(top: 10.h, left: 10.w, bottom: 30.h),
-                      child: PieChart(
+                          padding: EdgeInsets.only(
+                              top: 10.h, left: 10.w, bottom: 30.h),
+                          child: PieChart(
                             dataMap: chartController.data.value,
                             chartType: ChartType.disc,
-                            chartValuesOptions: ChartValuesOptions(
+                            chartValuesOptions: const ChartValuesOptions(
                               showChartValuesInPercentage: true,
                               decimalPlaces: 1,
                             ),
                           ),
-                    ))
+                        ))
                   ],
                 ),
               ),

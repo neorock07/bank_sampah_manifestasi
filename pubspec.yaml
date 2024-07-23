@@ -95,6 +95,14 @@ flutter:
     - assets/images/troli.png
     - assets/images/news.png
     - assets/images/recycle.png
+    - assets/images/non.png
+    - assets/images/organik.png
+    - assets/images/marker.png
+    - assets/images/ember.png
+    - assets/images/helm.png
+    - assets/images/teflon.png
+    - assets/images/tv.png
+    - assets/images/wajan.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

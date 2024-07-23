@@ -1,5 +1,8 @@
+import 'package:bank_sampah/View/BottomNavPage.dart';
 import 'package:bank_sampah/View/HomeActivity.dart';
 import 'package:bank_sampah/View/LoginActivity.dart';
+import 'package:bank_sampah/View/OnMap.dart';
+import 'package:bank_sampah/View/PenjemputanActivity.dart';
 import 'package:bank_sampah/View/RegisterActivity.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +14,11 @@ class Routes {
       case '/register':
         return MaterialPageRoute(builder: (_) => RegisterActivity());
       case '/home':
-        return MaterialPageRoute(builder: (_) => HomeActivity());
+        return MaterialPageRoute(builder: (_) => BottomNavPage());
+      case '/penjemputan':
+        return MaterialPageRoute(builder: (_) => PenjemputanActivity());
+      case '/onmap':
+        return MaterialPageRoute(builder: (_) => OnMap());
     
       default:
         return _errorRoute();

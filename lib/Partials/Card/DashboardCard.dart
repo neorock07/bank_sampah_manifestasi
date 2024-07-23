@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-Widget DashboardCard(BuildContext context) {
+Widget DashboardCard(BuildContext context, {
+  required Color background
+}) {
   return Container(
     width: MediaQuery.of(context).size.width * 0.9,
     decoration: BoxDecoration(
@@ -17,7 +19,7 @@ Widget DashboardCard(BuildContext context) {
             height: 80.h,
             width: MediaQuery.of(context).size.width * 0.4,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: background,
               borderRadius: BorderRadius.circular(10.dm),
             ),
             child: Column(
@@ -74,7 +76,7 @@ Widget DashboardCard(BuildContext context) {
             height: 80.h,
             width: MediaQuery.of(context).size.width * 0.4,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: background,
               borderRadius: BorderRadius.circular(10.dm),
             ),
             child:  Column(
