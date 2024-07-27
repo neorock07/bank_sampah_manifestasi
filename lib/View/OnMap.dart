@@ -25,8 +25,8 @@ class _OnMapState extends State<OnMap> {
   Timer? locationUpdateTimer;
   RoadInfo? roadinfo;
 
-  GeoPoint p = GeoPoint(latitude: -7.580621, longitude: 110.815537);
-  GeoPoint r = GeoPoint(latitude: -7.585901, longitude: 110.815208);
+  GeoPoint p = GeoPoint(latitude: -5.135581582936737, longitude: 119.4355839050661);
+  GeoPoint r = GeoPoint(latitude: -5.141533, longitude: 119.435011);
 
   Future<void> applyKoordinat() async {
     startLocationUpdates();
@@ -52,7 +52,7 @@ class _OnMapState extends State<OnMap> {
   }
 
   void startLocationUpdates() {
-    locationUpdateTimer = Timer.periodic(Duration(seconds: 5), (timer) async {
+    locationUpdateTimer = Timer.periodic(Duration(seconds: 10), (timer) async {
       try {
         // mpController.setMarker(p, "assets/images/motor.png");
         await mpController.controller.addMarker(r,
@@ -197,6 +197,9 @@ class _OnMapState extends State<OnMap> {
                               ),
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          height: 20.h,
                         )
                       ],
                     ),

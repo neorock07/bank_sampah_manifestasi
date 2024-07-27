@@ -99,12 +99,22 @@ class _HomeActivityState extends State<HomeActivity> {
                       ),
                     ),
                     SizedBox(height: 5.h),
-                    HomeButton(context,
-                        label: "Penukaran Poin",
-                        asset: "assets/images/troli.png"),
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, "/penukaran");
+                      },
+                      child: HomeButton(context,
+                          label: "Penukaran Poin",
+                          asset: "assets/images/troli.png"),
+                    ),
                     SizedBox(height: 5.h),
-                    HomeButton(context,
-                        label: "Berita", asset: "assets/images/news.png"),
+                    InkWell(
+                      onTap: (){
+                        Navigator.pushNamed(context, "/news");
+                      },
+                      child: HomeButton(context,
+                          label: "Berita", asset: "assets/images/news.png"),
+                    ),
                     SizedBox(height: 5.h),
                     Obx(() => Padding(
                           padding: EdgeInsets.only(

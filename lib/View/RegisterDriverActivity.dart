@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bank_sampah/Partials/Button/BaseButton.dart';
 import 'package:bank_sampah/Partials/Button/OptionButton.dart';
 import 'package:bank_sampah/Partials/Form/formPassword.dart';
@@ -7,14 +9,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class RegisterActivity extends StatefulWidget {
-  const RegisterActivity({Key? key}) : super(key: key);
+class RegisterDriverActivity extends StatefulWidget {
+  const RegisterDriverActivity({Key? key}) : super(key: key);
 
   @override
-  _RegisterActivityState createState() => _RegisterActivityState();
+  _RegisterDriverActivityState createState() => _RegisterDriverActivityState();
 }
 
-class _RegisterActivityState extends State<RegisterActivity> {
+class _RegisterDriverActivityState extends State<RegisterDriverActivity> {
   TextEditingController namaController = TextEditingController();
   TextEditingController waController = TextEditingController();
   TextEditingController nikController = TextEditingController();
@@ -51,7 +53,7 @@ class _RegisterActivityState extends State<RegisterActivity> {
                 Align(
                   alignment: Alignment.topCenter,
                   child: Text(
-                    "Daftar Akun",
+                    "Daftar Akun Driver",
                     style: TextStyle(
                         color: Colors.black,
                         fontFamily: "Bree",
@@ -73,33 +75,26 @@ class _RegisterActivityState extends State<RegisterActivity> {
                 SizedBox(
                   height: 20.h,
                 ),
-                 Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: FormText(context,
-                        label: "NIK",
-                        controller: nikController,
-                        type: TextInputType.number
-                        ),
-                  ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20.w),
+                  child: Obx(() {
+                    log("Selected : ${selectedOption}");
+                    
+                    return Row(
+                        children: [
+                          OptionButton(context,
+                              value: 1.obs,
+                              group_value: selectedOption,
+                              label: "L"),
+                          OptionButton(context,
+                              value: 2.obs,
+                              group_value: selectedOption,
+                              label: "P"),
+                        ],
+                      );
+                  } ),
                 ),
                 
-                SizedBox(
-                  height: 20.h,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: FormText(context,
-                        label: "Alamat/Tempat tinggal (RT/RW)",
-                        controller: alamatController,
-                        type: TextInputType.multiline, 
-                        maxline: 3
-                        ),
-                  ),
-                ),
                 SizedBox(
                   height: 20.h,
                 ),
@@ -138,7 +133,9 @@ class _RegisterActivityState extends State<RegisterActivity> {
                           controller: passController,
                           isVisible: isVisible))),
                 ),
-                SizedBox(height: 20.h,),
+                SizedBox(
+                  height: 20.h,
+                ),
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
@@ -150,31 +147,30 @@ class _RegisterActivityState extends State<RegisterActivity> {
                           sibling: passController,
                           isVisible: isVisible2))),
                 ),
-                SizedBox(height: 40.h,),
+                SizedBox(
+                  height: 40.h,
+                ),
                 Align(
                   alignment: Alignment.topCenter,
-                  child: BaseButton(
-                    context,
-                    label: "Daftar",
-                    height: 40.h, 
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    color: Colors.black,
-                    fontColor: Colors.white,
-                    onTap: (){
-                       if (global_key.currentState!.validate() == false) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                              "mohon isi data dengan benar!",
-                              style: TextStyle(
-                                fontFamily: "Poppins",
-                                fontSize: 12.sp,
-                              ),
-                            )));
-                          }else{
-                            Navigator.pushNamed(context, "/home");
-                          } 
+                  child: BaseButton(context,
+                      label: "Daftar",
+                      height: 40.h,
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      color: Colors.black,
+                      fontColor: Colors.white, onTap: () {
+                    if (global_key.currentState!.validate() == false) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                        "mohon isi data dengan benar!",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 12.sp,
+                        ),
+                      )));
+                    } else {
+                      Navigator.pushNamed(context, "/onmap_driver");
                     }
-                     ),
+                  }),
                 ),
                 SizedBox(
                   height: 40.h,

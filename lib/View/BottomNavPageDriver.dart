@@ -1,3 +1,4 @@
+import 'package:bank_sampah/View/CalculateItemActivity.dart';
 import 'package:bank_sampah/View/HistoryActivity.dart';
 import 'package:bank_sampah/View/HomeActivity.dart';
 import 'package:bank_sampah/View/ReportActivity.dart';
@@ -6,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-class BottomNavPage extends StatefulWidget {
-  const BottomNavPage({Key? key}) : super(key: key);
+class BottomNavPageDriver extends StatefulWidget {
+  const BottomNavPageDriver({Key? key}) : super(key: key);
 
   @override
-  _BottomNavPageState createState() => _BottomNavPageState();
+  _BottomNavPageDriverState createState() => _BottomNavPageDriverState();
 }
 
-class _BottomNavPageState extends State<BottomNavPage> {
+class _BottomNavPageDriverState extends State<BottomNavPageDriver> {
   var selectedTab = 0.obs;
 
   _setPage(int index) {
@@ -21,7 +22,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
   }
 
   List _pages = [
-    HomeActivity(),
+    CalculateItemActivity(),
     ShopActivity(),
     ReportActivity(),
     ReportActivity(),

@@ -10,22 +10,27 @@ Widget BaseButton(BuildContext context, {
   required void Function() onTap,
   double borderRadius = 0
 }){
-  return InkWell(
-    onTap: onTap,
-    child: Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(borderRadius),
-      ),
-      child: Center(
-        child: Padding(padding: EdgeInsets.all(5.dm), 
-        child: Text(label, style: TextStyle(
-          color: fontColor,
-          fontFamily: "Poppins",
-          fontSize: 14.sp  
-        ),),),
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      splashColor: Colors.grey,
+      focusColor: Colors.grey,
+      onTap: onTap,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        child: Center(
+          child: Padding(padding: EdgeInsets.all(5.dm), 
+          child: Text(label, style: TextStyle(
+            color: fontColor,
+            fontFamily: "Poppins",
+            fontSize: 14.sp  
+          ),),),
+        ),
       ),
     ),
   );

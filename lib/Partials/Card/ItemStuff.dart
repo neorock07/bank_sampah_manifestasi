@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget ItemStuff(BuildContext context,{
   required String aset,
-  required String label
+  required String label,
+  required String color
 }){
   return SizedBox(
     height: 100.h,
@@ -15,7 +16,7 @@ Widget ItemStuff(BuildContext context,{
           height: 80.h,
           width: 80.w,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 2.dm),
+            border: Border.all(color: (color == "g")? Colors.green : Colors.grey, width: 2.dm),
             borderRadius: BorderRadius.circular(10.dm),
             image: DecorationImage(
               image: AssetImage(aset),
@@ -29,7 +30,7 @@ Widget ItemStuff(BuildContext context,{
             width: 100.w,
             height: 30.h,
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: const Color.fromARGB(255, 232, 232, 232),
               borderRadius: BorderRadius.circular(10.dm)
             ),
             child: Center(child: Text(label, style: TextStyle(
@@ -38,6 +39,7 @@ Widget ItemStuff(BuildContext context,{
               fontSize: 14.sp
             ),),),
           ),
+          
         )
       ],
     ),
