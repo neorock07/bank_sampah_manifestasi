@@ -3,12 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+
 Widget TotalItemCard(
   BuildContext context, {
   required Color background,
   required RxDouble total_non,
   required RxDouble total_organik,
   required RxInt total_point,
+  required RxString items_non,
+  required RxString items_organik
 }) {
   return Column(
     children: [
@@ -54,7 +57,7 @@ Widget TotalItemCard(
                           height: 3.h,
                         ),
                         Text(
-                              "${total_non.value} KG",
+                              "${total_non.value.toStringAsFixed(2)} KG",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontFamily: "Poppins",
@@ -64,7 +67,7 @@ Widget TotalItemCard(
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
-                            "Botols",
+                            items_non.value,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 14.sp,
@@ -100,7 +103,7 @@ Widget TotalItemCard(
                           height: 3.h,
                         ),
                         Text(
-                              "${total_organik.value} KG",
+                              "${total_organik.value.toStringAsFixed(2)} KG",
                               style: TextStyle(
                                   color: Colors.black,
                                   fontFamily: "Poppins",
@@ -110,7 +113,7 @@ Widget TotalItemCard(
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
-                            "Botols",
+                            items_organik.value,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 14.sp,

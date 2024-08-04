@@ -11,7 +11,7 @@ class NewsActivity extends StatefulWidget {
   @override
   _NewsActivityState createState() => _NewsActivityState();
 }
-
+//halaman untuk berita
 class _NewsActivityState extends State<NewsActivity> {
   TextEditingController controller = TextEditingController();
 
@@ -61,6 +61,7 @@ class _NewsActivityState extends State<NewsActivity> {
                             )
                           ],
                         ),
+                        //profile user
                         Padding(
                           padding: EdgeInsets.only(left: 45.w, top: 5.h),
                           child: Text(
@@ -77,6 +78,7 @@ class _NewsActivityState extends State<NewsActivity> {
                     SizedBox(
                       height: 10.h,
                     ),
+                    //widget search bar
                     SearchCard(context,
                         controller: controller, hint: "Cari berita"),
                     SizedBox(
@@ -90,11 +92,13 @@ class _NewsActivityState extends State<NewsActivity> {
                           borderRadius: BorderRadius.circular(10.dm)),
                       child: Padding(
                         padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
+                        //list view untuk card berita
                         child: ListView.builder(
                             itemCount: 10,
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
+                                  //tampilkan data dummy ke widget card news
                                   NewsCard(context,
                                       asset: "assets/images/ember.png"),
                                   SizedBox(
@@ -111,6 +115,7 @@ class _NewsActivityState extends State<NewsActivity> {
                     SizedBox(
                       height: 20.h,
                     ),
+                    //membuat pagination (nomor halaman)
                     Align(
                         alignment: Alignment.bottomCenter,
                         child: PaginationView(context))

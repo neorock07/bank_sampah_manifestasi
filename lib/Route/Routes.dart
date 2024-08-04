@@ -2,6 +2,8 @@ import 'package:bank_sampah/View/BottomNavPage.dart';
 import 'package:bank_sampah/View/BottomNavPageDriver.dart';
 import 'package:bank_sampah/View/CalculateItemActivity.dart';
 import 'package:bank_sampah/View/HomeActivity.dart';
+import 'package:bank_sampah/View/ListDriverActivity.dart';
+import 'package:bank_sampah/View/ListUserActivity.dart';
 import 'package:bank_sampah/View/LoginActivity.dart';
 import 'package:bank_sampah/View/NewsActivity.dart';
 import 'package:bank_sampah/View/OnMap.dart';
@@ -35,6 +37,10 @@ class Routes {
         return MaterialPageRoute(builder: (_) => OnMapDriver());
       case '/penukaran':
         return MaterialPageRoute(builder: (_) => ShopActivity());
+      case '/list_driver':
+        return MaterialPageRoute(builder: (_) => ListDriverActivity());
+      case '/list_user':
+        return MaterialPageRoute(builder: (_) => ListUserActivity());
       case '/news':
         return MaterialPageRoute(builder: (_) => NewsActivity());
       case '/penukaran_done':

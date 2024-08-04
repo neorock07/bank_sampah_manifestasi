@@ -1,6 +1,9 @@
 import 'package:bank_sampah/View/HistoryActivity.dart';
+import 'package:bank_sampah/View/HistoryUserActivity.dart';
 import 'package:bank_sampah/View/HomeActivity.dart';
+import 'package:bank_sampah/View/ListDriverActivity.dart';
 import 'package:bank_sampah/View/ReportActivity.dart';
+import 'package:bank_sampah/View/ReportUserActivity.dart';
 import 'package:bank_sampah/View/ShopActivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,9 +26,9 @@ class _BottomNavPageState extends State<BottomNavPage> {
   List _pages = [
     HomeActivity(),
     ShopActivity(),
-    ReportActivity(),
-    ReportActivity(),
-    HistoryActivity()
+    ListDriverActivity(),
+    ReportUserActivity(),
+    HistoryUserActivity()
   ];
 
   @override

@@ -18,29 +18,36 @@ class OnMap extends StatefulWidget {
 }
 
 class _OnMapState extends State<OnMap> {
+  //inisiasi controller maps
   MapsController mpController = Get.put(MapsController());
+  //inisiasi list koordinat untuk menyimpan data koordinat user dan driver
   List<StaticPositionGeoPoint>? koordinat;
+  //inisiasi stream controller, timer, dan roadinfo untuk data menggambar rute jalan
   final StreamController<GeoPoint> streamController =
       StreamController<GeoPoint>();
   Timer? locationUpdateTimer;
   RoadInfo? roadinfo;
 
+//koordinat driver dan user
   GeoPoint p = GeoPoint(latitude: -5.135581582936737, longitude: 119.4355839050661);
   GeoPoint r = GeoPoint(latitude: -5.141533, longitude: 119.435011);
 
+//function untuk menjalankan update rute jalan
   Future<void> applyKoordinat() async {
     startLocationUpdates();
   }
 
+//menjalankan update koordinat dan rute saat halaman pertama kali dimuat
   @override
   void initState() {
     super.initState();
     applyKoordinat();
-    // mpController.setMarker(r, "assets/images/marker.png");
 
   }
 
+  //menggambar rute jalan
   Future<void> drawRoute(GeoPoint recipientLocation) async {
+    //menghapus rute jalan sebelumnya saat update rute baru
     await mpController.controller.removeLastRoad();
     roadinfo = await mpController.controller.drawRoad(r, p,
         roadType: RoadType.bike,
@@ -51,10 +58,11 @@ class _OnMapState extends State<OnMap> {
             roadWidth: 10));
   }
 
+  //function untuk menampilkan avatar user dan driver serta update lokasi dan rute
   void startLocationUpdates() {
+   //update stiap 10 detik
     locationUpdateTimer = Timer.periodic(Duration(seconds: 10), (timer) async {
       try {
-        // mpController.setMarker(p, "assets/images/motor.png");
         await mpController.controller.addMarker(r,
             markerIcon: MarkerIcon(
               iconWidget: IconMaker(
@@ -88,14 +96,18 @@ class _OnMapState extends State<OnMap> {
       child: Scaffold(
         body: Stack(
           children: [
+            //menjalankan streaming data lokasi
             StreamBuilder<GeoPoint>(
                 stream: streamController.stream,
                 builder: (context, snapshot) {
+                  //cek apakah data koordinat tidak kosong
                   if (snapshot.hasData) {
+                    //jika tidak kosong maka menggambar rute jalan
                     drawRoute(snapshot.data!);
                   }
                   return Container(
                       height: MediaQuery.of(context).size.height * 0.8,
+                      //menampilkan maps beserta avatar marker, rute jalan
                       child: MapBoxDonatur(
                         context,
                         mpController.controller,
@@ -154,19 +166,20 @@ class _OnMapState extends State<OnMap> {
                             ]),
                             Column(
                               children: [
+                                //menampilkan profile driver
                                 Container(
                                   width: 80.dm,
                                   height: 80.dm,
                                   decoration: BoxDecoration(
                                       borderRadius:
                                           BorderRadius.circular(10.dm),
-                                      image: DecorationImage(
+                                      image: const DecorationImage(
                                           image: AssetImage(
-                                              "assets/images/sd.jpeg"),
+                                              "assets/images/avatar.png"),
                                           fit: BoxFit.fill)),
                                 ),
                                 Text(
-                                  "Indra Sjafri",
+                                  "Driver 467",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: "Poppins",

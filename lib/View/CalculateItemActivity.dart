@@ -7,6 +7,7 @@ import 'package:bank_sampah/Partials/Card/TotalItemCard.dart';
 import 'package:bank_sampah/Partials/ClipPath/BaseClip.dart';
 import 'package:bank_sampah/View/PengirimanDoneActivity.dart';
 import 'package:bank_sampah/ViewModel/ItemPickedController.dart';
+import 'package:bank_sampah/ViewModel/TransactionController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class CalculateItemActivity extends StatefulWidget {
 }
 
 class _CalculateItemActivityState extends State<CalculateItemActivity> {
+  //data static untuk checkbox non-organik dan organik
   List<dynamic> non_organik = [
     {"item": "Botol", "kondisi": false.obs},
     {"item": "Kertas", "kondisi": false.obs},
@@ -30,9 +32,11 @@ class _CalculateItemActivityState extends State<CalculateItemActivity> {
     {"item": "Sampah makanan", "kondisi": false.obs},
     {"item": "Tanaman", "kondisi": false.obs},
   ];
+  //variable untuk menyimpan data yang terpilih
   Set<String> non_selected = {};
   Set<String> organik_selected = {};
 
+  //list text controller untuk tiap text field , default nilai set nilai 0
   List<TextEditingController> controllers_non = [
     TextEditingController(text: "0.0"),
     TextEditingController(text: "0.0"),
@@ -40,18 +44,26 @@ class _CalculateItemActivityState extends State<CalculateItemActivity> {
     TextEditingController(text: "0.0"),
     TextEditingController(text: "0.0"),
   ];
+  //list text controller untuk tiap text field , default nilai set nilai 0
 
   List<TextEditingController> controllers_organik = [
     TextEditingController(text: "0.0"),
   ];
 
+  RxString items_picked_non = "".obs;
+  RxString items_picked_organik = "".obs;
+  //controller itemPicked dan transaction
   var pickedController = Get.put(ItemPickedController());
+  var transController = Get.put(TransactionController());
 
+  //jika pindah ke halaman lain, hapus semua data pada variabel yang menyimpan data chekclist dan total nilai organik/non
   @override
   void dispose() {
     super.dispose();
     pickedController.map_controller_index.clear();
     pickedController.map_controller_organik_index.clear();
+    pickedController.map_non_items.clear();
+    pickedController.map_organik_items.clear();
     pickedController.total_point.value = 0;
     pickedController.total_non.value = 0;
     pickedController.total_organik.value = 0;
@@ -62,8 +74,12 @@ class _CalculateItemActivityState extends State<CalculateItemActivity> {
     return Scaffold(
       body: WillPopScope(
         onWillPop: () async {
+          //jika tekan back, hapus semua data pada variabel yang menyimpan data chekclist dan total nilai organik/non
+
           pickedController.map_controller_index.clear();
           pickedController.map_controller_organik_index.clear();
+          pickedController.map_non_items.clear();
+          pickedController.map_organik_items.clear();
           pickedController.total_point.value = 0;
           return true;
         },
@@ -119,6 +135,7 @@ class _CalculateItemActivityState extends State<CalculateItemActivity> {
                 padding: EdgeInsets.only(top: 160.h),
                 child: Column(
                   children: [
+                    ///tampilkan data non organik checkbox dengan widget dibawah
                     Align(
                         alignment: Alignment.topCenter,
                         child: ItemCalculateCard(context,
@@ -131,6 +148,8 @@ class _CalculateItemActivityState extends State<CalculateItemActivity> {
                     SizedBox(
                       height: 10.h,
                     ),
+                    ///tampilkan data organik checkbox dengan widget dibawah
+
                     Align(
                         alignment: Alignment.topCenter,
                         child: ItemCalculateCard(context,
@@ -144,19 +163,24 @@ class _CalculateItemActivityState extends State<CalculateItemActivity> {
                       height: 10.h,
                     ),
                     Obx(() {
-                      // for (var i in controllers_non) {
-                      //   pickedController.total_non.value = double.parse(i.text.toString());
-                      // }
+                      items_picked_non.value = non_selected.toString();
+
+                      items_picked_organik.value = organik_selected.toString();
+
                       log("nilai : ${pickedController.total_non.value}");
+                      //tampilkan card total jumlah non organik dan organik serta poin dengan widget ini
                       return TotalItemCard(context,
                           background: Colors.white,
                           total_non: pickedController.total_non,
                           total_organik: pickedController.total_organik,
-                          total_point: pickedController.total_point);
+                          total_point: pickedController.total_point,
+                          items_non: items_picked_non,
+                          items_organik: items_picked_organik);
                     }),
                     SizedBox(
                       height: 10.h,
                     ),
+                    //button untuk menyimpan data jumlah kg dan tipe item ke database
                     Align(
                         alignment: Alignment.topCenter,
                         child: BaseButton(context,
@@ -165,15 +189,31 @@ class _CalculateItemActivityState extends State<CalculateItemActivity> {
                             label: "KIRIM",
                             color: Color.fromRGBO(217, 217, 217, 1),
                             fontColor: Colors.black,
-                            borderRadius: 10.dm, onTap: () {
-                          Get.snackbar(
-                              "Terima Kasih", "Selamat pengiriman berhasil!");
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PengirimanDoneActivity(
-                                      poin:
-                                          pickedController.total_point.value)));
+                            borderRadius: 10.dm, onTap: () async {
+                          //menjalankan function ini untuk save ke database
+                          await transController
+                              .savePengiriman(context,
+                                  name: transController.pelanggan.value,
+                                  alamat: transController.alamat.value,
+                                  user_id: transController.id_user.value,
+                                  items_non: items_picked_non.toString(),
+                                  items_organik:
+                                      items_picked_organik.toString(),
+                                  total_non: pickedController.total_non.value,
+                                  total_organik:
+                                      pickedController.total_organik.value,
+                                  poin: pickedController.total_point.value)
+                              .then((value) {
+                            Get.snackbar(
+                                "Terima Kasih", "Selamat pengiriman berhasil!");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        PengirimanDoneActivity(
+                                            poin: pickedController
+                                                .total_point.value)));
+                          });
                         })),
                     SizedBox(
                       height: 50.h,

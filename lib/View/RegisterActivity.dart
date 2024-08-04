@@ -2,6 +2,7 @@ import 'package:bank_sampah/Partials/Button/BaseButton.dart';
 import 'package:bank_sampah/Partials/Button/OptionButton.dart';
 import 'package:bank_sampah/Partials/Form/formPassword.dart';
 import 'package:bank_sampah/Partials/Form/formText.dart';
+import 'package:bank_sampah/ViewModel/AuthController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,7 @@ class RegisterActivity extends StatefulWidget {
 }
 
 class _RegisterActivityState extends State<RegisterActivity> {
+  //inisiasi text controller
   TextEditingController namaController = TextEditingController();
   TextEditingController waController = TextEditingController();
   TextEditingController nikController = TextEditingController();
@@ -22,10 +24,13 @@ class _RegisterActivityState extends State<RegisterActivity> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController konfController = TextEditingController();
+  //variabel untuk kondisi radio button
   RxInt selectedOption = 1.obs;
   RxBool isVisible = true.obs;
   RxBool isVisible2 = true.obs;
   GlobalKey<FormState> global_key = GlobalKey<FormState>();
+  //inisiasi kontroller auth
+  AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +53,7 @@ class _RegisterActivityState extends State<RegisterActivity> {
                 SizedBox(
                   height: 50.h,
                 ),
+                //set title halaman
                 Align(
                   alignment: Alignment.topCenter,
                   child: Text(
@@ -62,6 +68,7 @@ class _RegisterActivityState extends State<RegisterActivity> {
                 SizedBox(
                   height: 40.h,
                 ),
+                ////form untuk nama
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
@@ -73,21 +80,21 @@ class _RegisterActivityState extends State<RegisterActivity> {
                 SizedBox(
                   height: 20.h,
                 ),
-                 Align(
+                //form untuk nik
+                Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: FormText(context,
                         label: "NIK",
                         controller: nikController,
-                        type: TextInputType.number
-                        ),
+                        type: TextInputType.number),
                   ),
                 ),
-                
                 SizedBox(
                   height: 20.h,
                 ),
+                //form untuk alamat
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
@@ -95,14 +102,14 @@ class _RegisterActivityState extends State<RegisterActivity> {
                     child: FormText(context,
                         label: "Alamat/Tempat tinggal (RT/RW)",
                         controller: alamatController,
-                        type: TextInputType.multiline, 
-                        maxline: 3
-                        ),
+                        type: TextInputType.multiline,
+                        maxline: 3),
                   ),
                 ),
                 SizedBox(
                   height: 20.h,
                 ),
+                //form untuk no wa
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
@@ -116,19 +123,21 @@ class _RegisterActivityState extends State<RegisterActivity> {
                 SizedBox(
                   height: 20.h,
                 ),
+                //form untuk email
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: FormText(context,
-                        label: "Username",
+                        label: "Email",
                         controller: usernameController,
-                        type: TextInputType.text),
+                        type: TextInputType.emailAddress),
                   ),
                 ),
                 SizedBox(
                   height: 20.h,
                 ),
+                //form untuk password
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
@@ -138,7 +147,10 @@ class _RegisterActivityState extends State<RegisterActivity> {
                           controller: passController,
                           isVisible: isVisible))),
                 ),
-                SizedBox(height: 20.h,),
+                SizedBox(
+                  height: 20.h,
+                ),
+                //form untuk ulang password
                 Align(
                   alignment: Alignment.topCenter,
                   child: SizedBox(
@@ -150,32 +162,51 @@ class _RegisterActivityState extends State<RegisterActivity> {
                           sibling: passController,
                           isVisible: isVisible2))),
                 ),
-                SizedBox(height: 40.h,),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: BaseButton(
-                    context,
-                    label: "Daftar",
-                    height: 40.h, 
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    color: Colors.black,
-                    fontColor: Colors.white,
-                    onTap: (){
-                       if (global_key.currentState!.validate() == false) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                              "mohon isi data dengan benar!",
-                              style: TextStyle(
-                                fontFamily: "Poppins",
-                                fontSize: 12.sp,
-                              ),
-                            )));
-                          }else{
-                            Navigator.pushNamed(context, "/home");
-                          } 
-                    }
-                     ),
+                SizedBox(
+                  height: 40.h,
                 ),
+                //kode untuk menyimpan data register
+                Obx(() {
+                  if (authController.isLoading.value == true) {
+                    return const CircularProgressIndicator(
+                      color: Colors.blue,
+                    );
+                  } else {
+                    return Align(
+                      alignment: Alignment.topCenter,
+                      child: BaseButton(context,
+                          label: "Daftar",
+                          height: 40.h,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          color: Colors.black,
+                          fontColor: Colors.white, onTap: () {
+                        //cek apakah data sudah diisi dengan benar
+                        if (global_key.currentState!.validate() == false) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                            "mohon isi data dengan benar!",
+                            style: TextStyle(
+                              fontFamily: "Poppins",
+                              fontSize: 12.sp,
+                            ),
+                          )));
+                        } else {
+                          authController.isLoading.value = true;
+                          setState(() {});
+                          //panggil auth controller untuk register
+                          authController.registerUser(context,
+                              email: usernameController.text,
+                              password: passController.text,
+                              no_wa: waController.text,
+                              alamat: alamatController.text,
+                              nik: nikController.text,
+                              name: namaController.text,
+                              username: usernameController.text);
+                        }
+                      }),
+                    );
+                  }
+                }),
                 SizedBox(
                   height: 40.h,
                 )

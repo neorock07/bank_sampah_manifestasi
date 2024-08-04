@@ -9,34 +9,34 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HistoryActivity extends StatefulWidget {
-  const HistoryActivity({Key? key}) : super(key: key);
+class HistoryUserActivity extends StatefulWidget {
+  const HistoryUserActivity({Key? key}) : super(key: key);
 
   @override
-  _HistoryActivityState createState() => _HistoryActivityState();
+  _HistoryUserActivityState createState() => _HistoryUserActivityState();
 }
-//halaman untuk history dari sisi driver
-class _HistoryActivityState extends State<HistoryActivity> {
-  //inisiasi transaction controller
+//halaman untuk history user
+class _HistoryUserActivityState extends State<HistoryUserActivity> {
   TransactionController transactionController =
       Get.put(TransactionController());
 
-  //get data history dari database
+//get data history dari database
   Future<void> getData() async {
-    await transactionController.getTransaksi(context);
+    await transactionController.getRequestById(context);
   }
 
   RxString name = "".obs;
   SharedPreferences? pref;
-  //get data shared preferences 
+  //get data akun dari shared preferences
   Future<void> getUserData() async {
     pref = await SharedPreferences.getInstance();
     name.value = pref!.getString("nama")!;
   }
-  //inisiasi auth controller
+
+  //controller auth
   var authController = Get.put(AuthController());
 
-  //jalankan kedua function tersebut saat halaman dimuat pertama kali
+///jalankan kedua function pada saat pertama kali buka halaman
   @override
   void initState() {
     super.initState();
@@ -71,9 +71,9 @@ class _HistoryActivityState extends State<HistoryActivity> {
                     fontSize: 20.sp,
                   ),
                 ),
-                //untuk tombol log out
                 InkWell(
                   onTap: () async {
+                    //dialog alert untuk log out
                     DialogPop(context,
                         icon: Column(
                           children: [
@@ -87,13 +87,13 @@ class _HistoryActivityState extends State<HistoryActivity> {
                                     backgroundColor:
                                         MaterialStatePropertyAll(Colors.green)),
                                 onPressed: () {
+                                //hapus data login dari shared preferences ketika logout kemudian pergi login
                                   pref!.clear();
                                   authController.isLoading.value = false;
                                   authController.isLoading2.value = false;
                                   authController.isLoading3.value = false;
                                   authController.isLoading4.value = false;
-                                  // Navigator.pushReplacementNamed(
-                                  //     context, "/login");
+                               
                                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginActivity()));    
                                 },
                                 child: Text(
@@ -118,23 +118,27 @@ class _HistoryActivityState extends State<HistoryActivity> {
             Obx(() => Container(
                   height: MediaQuery.of(context).size.height * 0.75,
                   width: MediaQuery.of(context).size.width,
-                  //cek apakah data kosong atau tidak , jika kosong tampilkan loading jika tidak maka tampilkan list view berisi card widget
-                  child: (transactionController.list_user_data.isEmpty)
-                      ? Container(
+                  child: (transactionController.list_history_user_data.isEmpty)
+                      ? 
+                      //cek apakah data kosong, jika kosong tampilkan 404
+                      Container(
                         height: 80.dm,
                         width: 80.dm,
                         decoration: BoxDecoration(
                           image: DecorationImage(image: AssetImage("assets/images/not.png"), fit: BoxFit.cover)
                         ),
                       )
-                      : ListView.builder(
+                      : 
+                      //jika tidak kosong maka tampilkan list history user
+                      ListView.builder(
                           itemCount:
-                              transactionController.list_user_data.value.length,
+                              transactionController.list_history_user_data.value.length,
                           itemBuilder: (_, index) {
                             var item =
-                                transactionController.list_user_data.value;
+                                transactionController.list_history_user_data.value;
                             return Padding(
                               padding: EdgeInsets.all(10.dm),
+                              //gunakan widget history card untuk menampilkan data history
                               child: HistoryCard(context,
                                   non: item[index]["total_non"],
                                   organik: item[index]["total_organik"],

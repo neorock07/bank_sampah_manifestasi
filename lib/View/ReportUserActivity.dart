@@ -1,6 +1,6 @@
 import 'package:bank_sampah/Partials/Card/HistoryCard.dart';
+import 'package:bank_sampah/Partials/Card/ReportCard.dart';
 import 'package:bank_sampah/Partials/Dialog/DialogPop.dart';
-import 'package:bank_sampah/View/LoginActivity.dart';
 import 'package:bank_sampah/ViewModel/AuthController.dart';
 import 'package:bank_sampah/ViewModel/TransactionController.dart';
 import 'package:flutter/material.dart';
@@ -9,34 +9,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HistoryActivity extends StatefulWidget {
-  const HistoryActivity({Key? key}) : super(key: key);
+class ReportUserActivity extends StatefulWidget {
+  const ReportUserActivity({Key? key}) : super(key: key);
 
   @override
-  _HistoryActivityState createState() => _HistoryActivityState();
+  _ReportUserActivityState createState() => _ReportUserActivityState();
 }
-//halaman untuk history dari sisi driver
-class _HistoryActivityState extends State<HistoryActivity> {
-  //inisiasi transaction controller
+
+class _ReportUserActivityState extends State<ReportUserActivity> {
+  //inisiasi variable controller transaction
   TransactionController transactionController =
       Get.put(TransactionController());
-
-  //get data history dari database
+  
+  //fungsi untuk memanggil function dari controller transaction
+  //untuk get data history transaksi berdasarkan id akun user saat ini
   Future<void> getData() async {
-    await transactionController.getTransaksi(context);
+    await transactionController.getRequestById(context);
   }
 
   RxString name = "".obs;
   SharedPreferences? pref;
-  //get data shared preferences 
+  //inisiasi controller authentication
+  var authController = Get.put(AuthController());
+  
+  //mendapatkan data nama akun yang telah disimpan di shared preferences
   Future<void> getUserData() async {
     pref = await SharedPreferences.getInstance();
     name.value = pref!.getString("nama")!;
   }
-  //inisiasi auth controller
-  var authController = Get.put(AuthController());
 
-  //jalankan kedua function tersebut saat halaman dimuat pertama kali
+  //load kedua fungsi tadi pada saat halaman ini pertama kali dimuat
   @override
   void initState() {
     super.initState();
@@ -64,14 +66,14 @@ class _HistoryActivityState extends State<HistoryActivity> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  "History Transaksi",
+                  "Laporan Hasil Transaksi",
                   style: TextStyle(
                     color: Colors.black,
                     fontFamily: "Bree",
                     fontSize: 20.sp,
                   ),
                 ),
-                //untuk tombol log out
+                //profile ketika di klik, akan muncul alert dialog dan sebuah tombol log-out
                 InkWell(
                   onTap: () async {
                     DialogPop(context,
@@ -87,14 +89,16 @@ class _HistoryActivityState extends State<HistoryActivity> {
                                     backgroundColor:
                                         MaterialStatePropertyAll(Colors.green)),
                                 onPressed: () {
+                                  // menghapus data shared preferences yang menyimpan data akun sekarang,
+                                  
                                   pref!.clear();
+                                  //ubah kondisi loading pada halaman login dan register ke kondisi semula (agar tidak muncul loading ketika kembali ke halaman login/register)
                                   authController.isLoading.value = false;
                                   authController.isLoading2.value = false;
                                   authController.isLoading3.value = false;
                                   authController.isLoading4.value = false;
-                                  // Navigator.pushReplacementNamed(
-                                  //     context, "/login");
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginActivity()));    
+                                  Navigator.pushReplacementNamed(
+                                      context, "/login");
                                 },
                                 child: Text(
                                   "Log-Out",
@@ -107,7 +111,7 @@ class _HistoryActivityState extends State<HistoryActivity> {
                         ));
                   },
                   child: const CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/avatar.png"),
+                    backgroundImage: AssetImage("assets/images/sd.jpeg"),
                   ),
                 )
               ],
@@ -118,28 +122,30 @@ class _HistoryActivityState extends State<HistoryActivity> {
             Obx(() => Container(
                   height: MediaQuery.of(context).size.height * 0.75,
                   width: MediaQuery.of(context).size.width,
-                  //cek apakah data kosong atau tidak , jika kosong tampilkan loading jika tidak maka tampilkan list view berisi card widget
-                  child: (transactionController.list_user_data.isEmpty)
+                  //tampilkan gambar 404 jika tidak ada data
+                  child: (transactionController.list_history_user_data.isEmpty)
                       ? Container(
-                        height: 80.dm,
-                        width: 80.dm,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(image: AssetImage("assets/images/not.png"), fit: BoxFit.cover)
-                        ),
-                      )
+                          height: 80.dm,
+                          width: 80.dm,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage("assets/images/not.png"),
+                                  fit: BoxFit.cover)),
+                        )
+                        //tampilkan daftar history laporan transaksi jika ada data
                       : ListView.builder(
                           itemCount:
-                              transactionController.list_user_data.value.length,
+                              transactionController.list_history_user_data.value.length,
                           itemBuilder: (_, index) {
                             var item =
-                                transactionController.list_user_data.value;
+                                transactionController.list_history_user_data.value;
                             return Padding(
                               padding: EdgeInsets.all(10.dm),
-                              child: HistoryCard(context,
+                              //tampilkan data yang didapat ke widget Card report
+                              child: ReportCard(context,
                                   non: item[index]["total_non"],
                                   organik: item[index]["total_organik"],
                                   poin: item[index]["poin"],
-                                  asset: "assets/images/teflon.png",
                                   non_item: item[index]["items_non"],
                                   organik_item: item[index]["items_organik"],
                                   user: "assets/images/avatar.png",

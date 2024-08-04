@@ -59,19 +59,33 @@ Widget ItemCalculateCard(
                       pickedController.map_controller_index[index] =
                           double.parse(val);
                       pickedController.total_non.value = 0;
+                      int index_item = 0;
+                      pickedController.map_non_items.clear();
                       for (var i
                           in pickedController.map_controller_index.values) {
                         pickedController.total_non.value += i;
+                        index_item += 1;
+                        if(i > 0){
+                          pickedController.map_non_items[i] = item[index_item - 1]['item'];
+                        }
                       }
+                          
+
                     } else {
                       log("item index : ${controllers.indexOf(e)}");
                       int index = controllers.indexOf(e);
                       pickedController.map_controller_organik_index[index] =
                           double.parse(val);
                       pickedController.total_organik.value = 0;
+                      int index_item = 0;
+                      pickedController.map_organik_items.clear();
                       for (var i in pickedController
                           .map_controller_organik_index.values) {
                         pickedController.total_organik.value += i;
+                        index_item += 1;
+                        if(i > 0){
+                          pickedController.map_organik_items[i] = item[index_item - 1]['item'];
+                        }
                       }
                     }
                     pickedController.total_point.value =  ((pickedController.total_organik.value + pickedController.total_non.value) * 200).toInt(); 

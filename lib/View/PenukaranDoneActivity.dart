@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PenukaranDoneActivity extends StatefulWidget {
   PenukaranDoneActivity({ super.key, this.item_data});
-
+  //menambahkan parameter di class ini agar dapat mengirim data dari shop ke penukaran selesai
   Map<String, dynamic>? item_data;
 
   @override
@@ -38,6 +38,7 @@ class _PenukaranDoneActivityState extends State<PenukaranDoneActivity> {
                   color: Color.fromRGBO(217, 217, 217, 1),
                   borderRadius: BorderRadius.circular(10.dm)
                 ),
+                //card untuk title 
                 child: Center(
                   child: Text("Transaksi Selesai", style: TextStyle(
                     fontFamily: "Poppins",
@@ -57,6 +58,7 @@ class _PenukaranDoneActivityState extends State<PenukaranDoneActivity> {
                 backgroundImage: AssetImage(widget.item_data!['image']),
                 radius: 120.dm,
               ),
+              //text selesai
               Center(
                 child: Text("SELESAI", style: TextStyle(
                   fontSize: 35.sp, 
@@ -78,6 +80,7 @@ class _PenukaranDoneActivityState extends State<PenukaranDoneActivity> {
                     color: const Color.fromRGBO(217, 217, 217, 1),
                     borderRadius: BorderRadius.circular(10.dm)
                   ),
+                  //tampilkan poin yang ditukar
                   child: Padding(
                     padding: EdgeInsets.all(5.dm),
                     child: Center(

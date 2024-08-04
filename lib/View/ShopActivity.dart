@@ -19,8 +19,10 @@ class ShopActivity extends StatefulWidget {
 }
 
 class _ShopActivityState extends State<ShopActivity> {
+  //inisiasi kontroller untuk text-field widget search
   TextEditingController searchController = TextEditingController();
 
+  //data static untuk list barang --> tinggal ganti lokasi asset dan data lain.
   List<dynamic> item_data = [
     {"item": "assets/images/ember.png", "harga": "Rp.30,000", "color": "a"},
     {"item": "assets/images/helm.png", "harga": "Rp.150,000", "color": "a"},
@@ -42,13 +44,15 @@ class _ShopActivityState extends State<ShopActivity> {
     {"item": "assets/images/tv.png", "harga": "Rp.450,000", "color": "a"},
     {"item": "assets/images/wajan.png", "harga": "Rp.50,000", "color": "a"},
   ];
-
+  //variabel yang digunakan untuk menyimpan data sementara yang di select
   Map<String, dynamic> item_picked = {};
+  //variabel untuk pengkondisian select barang
   bool isTap = false;
 
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
+      //setting warna status bar
       value: SystemUiOverlayStyle.light.copyWith(
         statusBarColor: const Color.fromARGB(255, 239, 239, 239),
         systemNavigationBarColor: Colors.black,
@@ -60,10 +64,11 @@ class _ShopActivityState extends State<ShopActivity> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: Container(
           width: MediaQuery.of(context).size.width * 0.8,
+          //widget tombol
           child: FloatingActionButton(
             onPressed: () {
               log(item_picked.toString());
-              // Navigator.pushNamed(context, "/penukaran_done");
+              //cek jika data yang dipilih tidak kosong maka dikirim ke halaman penukaran poin
               if (item_picked.values.isNotEmpty) {
                 Navigator.push(
                     context,
@@ -100,18 +105,11 @@ class _ShopActivityState extends State<ShopActivity> {
                     padding: EdgeInsets.only(top: 8.h),
                     child: Align(
                         alignment: Alignment.topCenter,
+                        //widget card dashboard info jumlah sampah terkumpul
                         child: DashboardCard(context,
                             background: Color.fromRGBO(66, 215, 167, 1))),
                   ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: 12.w),
-                      child: const CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/sd.jpeg"),
-                      ),
-                    ),
-                  )
+                  
                 ]),
               ),
               Padding(
@@ -127,10 +125,12 @@ class _ShopActivityState extends State<ShopActivity> {
                   ),
                 ),
               ),
+              //widget search bar
               SearchCard(context, controller: searchController),
               Container(
                 height: 120.h,
                 width: MediaQuery.of(context).size.width,
+                //widget listView untuk membuat list daftar barang
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: item_data.length,
@@ -139,9 +139,12 @@ class _ShopActivityState extends State<ShopActivity> {
                         padding: EdgeInsets.only(left: 7.w),
                         child: Material(
                           color: Colors.transparent,
+                          //button jika di klik
                           child: InkWell(
                             splashColor: Colors.grey,
                             onTap: () {
+                              //kondisi jika klik maka menambahkan data ke variabel item_picked
+                              //ubah warna border ke green
                               if (isTap == false) {
                                 item_data[index]['color'] = 'g';
                                 item_picked['image'] = item_data[index]['item'];
@@ -149,7 +152,10 @@ class _ShopActivityState extends State<ShopActivity> {
                                 item_picked['poin'] = item_data[index]['harga']
                                     .toString()
                                     .split("Rp.")[1];
-                              } else {
+                              } 
+                              //kondisi jika klik untuk un-selected item, dengan menghapus data item_picked
+                              //ubah warna border ke abu2
+                              else {
                                 item_data[index]['color'] = 'a';
                                 item_picked.clear();
                               }
@@ -159,6 +165,7 @@ class _ShopActivityState extends State<ShopActivity> {
                                 log("item picked : ${item_picked.values}");
                               });
                             },
+                            //tampilkan data item_data ke widget dalam listView
                             child: ItemStuff(context,
                                 aset: "${item_data[index]['item']}",
                                 label: "${item_data[index]['harga']}",
@@ -183,6 +190,7 @@ class _ShopActivityState extends State<ShopActivity> {
                 ),
               ),
               SizedBox(height: 5.h),
+              //widget untuk menampilkan card promosi
               PromotionCard(context, asset: item_data[2]['item']),
               SizedBox(
                 height: 5.h,
@@ -190,6 +198,7 @@ class _ShopActivityState extends State<ShopActivity> {
               Container(
                 height: 120.h,
                 width: MediaQuery.of(context).size.width,
+                //membuat daftar barang ke dua
                 child: ListView.builder(
                     reverse: true,
                     scrollDirection: Axis.horizontal,
@@ -210,6 +219,7 @@ class _ShopActivityState extends State<ShopActivity> {
               Container(
                 height: 120.h,
                 width: MediaQuery.of(context).size.width,
+                //membuat daftar barang ketiga
                 child: ListView.builder(
                     reverse: true,
                     scrollDirection: Axis.horizontal,

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PengirimanDoneActivity extends StatefulWidget {
   PengirimanDoneActivity({super.key, this.poin});
 
+  //buat untuk menerima poin dari halaman penjemputan
   int? poin;
   @override
   _PengirimanDoneActivityState createState() => _PengirimanDoneActivityState();
@@ -79,10 +80,12 @@ class _PengirimanDoneActivityState extends State<PengirimanDoneActivity> {
                         color: const Color.fromRGBO(217, 217, 217, 1),
                         borderRadius: BorderRadius.circular(10.dm)),
                     child: Padding(
-                      padding: EdgeInsets.all(5.dm),
+                      padding: EdgeInsets.all(10.dm),
                       child: Center(
+                        //untuk menampilkan poin yang diterima
                         child: Text(
-                          "Poin diterima : ${widget.poin}",
+                          "Terkirim : ${widget.poin}",
+                          // "Terkirim",
                           style: TextStyle(
                             fontFamily: "Poppins",
                             fontSize: 20.sp,

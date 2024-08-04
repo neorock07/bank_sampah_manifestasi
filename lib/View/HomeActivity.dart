@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Partials/Dialog/DialogPop.dart';
 
 class HomeActivity extends StatefulWidget {
   const HomeActivity({Key? key}) : super(key: key);
@@ -15,7 +18,23 @@ class HomeActivity extends StatefulWidget {
 }
 
 class _HomeActivityState extends State<HomeActivity> {
+  //inisiasi chart controller
   HomeChartController chartController = Get.put(HomeChartController());
+
+  RxString name = "".obs;
+  SharedPreferences? pref;
+  //get user akun data dari shared preferences
+  Future<void> getUserData() async {
+    pref = await SharedPreferences.getInstance();
+    name.value = pref!.getString("nama")!;
+  }
+
+  //menjalaknkan function tersbut saat halaman pertama kali dibuka
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,38 +78,75 @@ class _HomeActivityState extends State<HomeActivity> {
                                 fontSize: 20.sp,
                               ),
                             ),
-                            const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/sd.jpeg"),
-                            )
+                            InkWell(
+                              //profile ketika di klik tampil alert dialog dan tombol log out
+                              onTap: () async {
+                                DialogPop(context,
+                                    icon: Column(
+                                      children: [
+                                        Text("Tekan untuk keluar Akun",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontFamily: "Poppins",
+                                                fontSize: 14.sp)),
+                                        ElevatedButton(
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStatePropertyAll(
+                                                        Colors.green)),
+                                            onPressed: () {
+                                              //hapus data login yang ada pada shared preferences
+                                              pref!.clear();
+                                              //pergi ke halaman login setelah dihapus
+                                              Navigator.pushReplacementNamed(
+                                                  context, "/login");
+                                            },
+                                            child: Text(
+                                              "Log-Out",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "Poppins",
+                                                  fontSize: 14.sp),
+                                            ))
+                                      ],
+                                    ));
+                              },
+                              child: const CircleAvatar(
+                                backgroundImage:
+                                    AssetImage("assets/images/avatar.png"),
+                              ),
+                            ),
                           ],
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 45.w, top: 5.h),
-                          child: Text(
-                            "Sin Te Yong",
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: "Poppins",
-                              fontSize: 14.sp,
-                            ),
-                          ),
+                          child: Obx(() => Text(
+                                name.value,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: "Poppins",
+                                  fontSize: 14.sp,
+                                ),
+                              )),
                         ),
                       ],
                     ),
                     SizedBox(
                       height: 30.h,
                     ),
+                    //widget dahsboard informasi jumlah sampah yang terkumpul , dll edit nilai widget ini apabila diperlukan
                     DashboardCard(context, background: Colors.white),
                     SizedBox(
                       height: 5.h,
                     ),
+                    //button penjemputan
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
                         splashColor: Colors.grey,
                         hoverColor: Colors.grey,
                         onTap: () {
+                          //pergi ke halaman penjemptan
                           Navigator.pushNamed(context, "/penjemputan");
                         },
                         child: HomeButton(context,
@@ -99,8 +155,10 @@ class _HomeActivityState extends State<HomeActivity> {
                       ),
                     ),
                     SizedBox(height: 5.h),
+                    //button penukaran poin
                     InkWell(
-                      onTap: (){
+                      onTap: () {
+                        //pergi ke halaman penukaran
                         Navigator.pushNamed(context, "/penukaran");
                       },
                       child: HomeButton(context,
@@ -108,8 +166,10 @@ class _HomeActivityState extends State<HomeActivity> {
                           asset: "assets/images/troli.png"),
                     ),
                     SizedBox(height: 5.h),
+                    //button untuk ke berita
                     InkWell(
-                      onTap: (){
+                      onTap: () {
+                        //pergi ke halaman news 
                         Navigator.pushNamed(context, "/news");
                       },
                       child: HomeButton(context,
@@ -119,6 +179,7 @@ class _HomeActivityState extends State<HomeActivity> {
                     Obx(() => Padding(
                           padding: EdgeInsets.only(
                               top: 10.h, left: 10.w, bottom: 30.h),
+                          //membuat pie chart dari data yang ada pada chart controller
                           child: PieChart(
                             dataMap: chartController.data.value,
                             chartType: ChartType.disc,

@@ -81,7 +81,7 @@ Widget ReportCard(context,
                         fontWeight: FontWeight.normal),
                   ),
                   Text(
-                    "${non} kg",
+                    "${non.toStringAsFixed(2)} kg",
                     style: TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 16.sp,
@@ -105,7 +105,7 @@ Widget ReportCard(context,
                         fontWeight: FontWeight.normal),
                   ),
                   Text(
-                    "${organik} kg",
+                    "${organik.toStringAsFixed(2)} kg",
                     style: TextStyle(
                         fontFamily: "Poppins",
                         fontSize: 16.sp,
