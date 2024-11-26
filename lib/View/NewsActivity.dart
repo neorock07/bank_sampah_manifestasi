@@ -1,9 +1,11 @@
 import 'package:bank_sampah/Partials/Card/NewsCard.dart';
 import 'package:bank_sampah/Partials/Pagination/PaginationView.dart';
 import 'package:bank_sampah/Partials/Search/SearchCard.dart';
+import 'package:bank_sampah/ViewModel/TransactionController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class NewsActivity extends StatefulWidget {
   const NewsActivity({Key? key}) : super(key: key);
@@ -14,6 +16,7 @@ class NewsActivity extends StatefulWidget {
 //halaman untuk berita
 class _NewsActivityState extends State<NewsActivity> {
   TextEditingController controller = TextEditingController();
+  TransactionController trans = Get.put(TransactionController());
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +58,14 @@ class _NewsActivityState extends State<NewsActivity> {
                                 fontSize: 20.sp,
                               ),
                             ),
-                            const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/images/sd.jpeg"),
+                            InkWell(
+                              onTap: () {
+                                trans.getTotalPoint();
+                              },
+                              child: const CircleAvatar(
+                                backgroundImage:
+                                    AssetImage("assets/images/sd.jpeg"),
+                              ),
                             )
                           ],
                         ),

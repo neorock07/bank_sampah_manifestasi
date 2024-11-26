@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 Widget DashboardCard(BuildContext context, {
-  required Color background
+  required Color background,
+  required int saldo, 
+  required double total_sampah
 }) {
   return Container(
     width: MediaQuery.of(context).size.width * 0.9,
@@ -56,7 +59,7 @@ Widget DashboardCard(BuildContext context, {
                     ),
                     SizedBox(width: 2.w,),
                     Text(
-                      "100,000",
+                      "${NumberFormat('#,###').format(saldo)}",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.sp,
@@ -93,7 +96,7 @@ Widget DashboardCard(BuildContext context, {
                     ),
                     SizedBox(width: 2.w,),
                     Text(
-                      "61,5 kg",
+                      "${total_sampah} KG",
                       style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.sp,
@@ -101,6 +104,7 @@ Widget DashboardCard(BuildContext context, {
                             fontWeight: FontWeight.bold
                           ),
                     ),
+                    
                   ],
                 ),
           ),

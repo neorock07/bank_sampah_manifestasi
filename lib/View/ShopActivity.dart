@@ -4,10 +4,12 @@ import 'package:bank_sampah/Partials/Card/DashboardCard.dart';
 import 'package:bank_sampah/Partials/Card/ItemStuff.dart';
 import 'package:bank_sampah/Partials/Card/PromotionCard.dart';
 import 'package:bank_sampah/View/PenukaranDoneActivity.dart';
+import 'package:bank_sampah/ViewModel/TransactionController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../Partials/Search/SearchCard.dart';
 
@@ -22,32 +24,123 @@ class _ShopActivityState extends State<ShopActivity> {
   //inisiasi kontroller untuk text-field widget search
   TextEditingController searchController = TextEditingController();
 
+  dynamic poinUser = 0.obs;
+  dynamic totalSampah = 0.0.obs;
   //data static untuk list barang --> tinggal ganti lokasi asset dan data lain.
   List<dynamic> item_data = [
-    {"item": "assets/images/ember.png", "harga": "Rp.30,000", "color": "a"},
-    {"item": "assets/images/helm.png", "harga": "Rp.150,000", "color": "a"},
-    {"item": "assets/images/teflon.png", "harga": "Rp.60,000", "color": "a"},
-    {"item": "assets/images/tv.png", "harga": "Rp.450,000", "color": "a"},
-    {"item": "assets/images/wajan.png", "harga": "Rp.50,000", "color": "a"},
+    {
+      "item": "assets/images/ember.png",
+      "harga": 300,
+      "color": "a",
+      "nama": "Ember"
+    },
+    {
+      "item": "assets/images/helm.png",
+      "harga": 1500,
+      "color": "a",
+      "nama": "Helm"
+    },
+    {
+      "item": "assets/images/teflon.png",
+      "harga": 600,
+      "color": "a",
+      "nama": "Teflon"
+    },
+    {
+      "item": "assets/images/tv.png",
+      "harga": 4500,
+      "color": "a",
+      "nama": "Televisi"
+    },
+    {
+      "item": "assets/images/wajan.png",
+      "harga": 500,
+      "color": "a",
+      "nama": "Wajan"
+    },
   ];
   List<dynamic> item_data2 = [
-    {"item": "assets/images/ember.png", "harga": "Rp.30,000", "color": "a"},
-    {"item": "assets/images/helm.png", "harga": "Rp.150,000", "color": "a"},
-    {"item": "assets/images/teflon.png", "harga": "Rp.60,000", "color": "a"},
-    {"item": "assets/images/tv.png", "harga": "Rp.450,000", "color": "a"},
-    {"item": "assets/images/wajan.png", "harga": "Rp.50,000", "color": "a"},
+    {
+      "item": "assets/images/ember.png",
+      "harga": 300,
+      "color": "a",
+      "nama": "Ember"
+    },
+    {
+      "item": "assets/images/helm.png",
+      "harga": 1500,
+      "color": "a",
+      "nama": "Helm"
+    },
+    {
+      "item": "assets/images/teflon.png",
+      "harga": 600,
+      "color": "a",
+      "nama": "Teflon"
+    },
+    {
+      "item": "assets/images/tv.png",
+      "harga": 4500,
+      "color": "a",
+      "nama": "Televisi"
+    },
+    {
+      "item": "assets/images/wajan.png",
+      "harga": 500,
+      "color": "a",
+      "nama": "Wajan"
+    },
   ];
   List<dynamic> item_data3 = [
-    {"item": "assets/images/ember.png", "harga": "Rp.30,000", "color": "a"},
-    {"item": "assets/images/helm.png", "harga": "Rp.150,000", "color": "a"},
-    {"item": "assets/images/teflon.png", "harga": "Rp.60,000", "color": "a"},
-    {"item": "assets/images/tv.png", "harga": "Rp.450,000", "color": "a"},
-    {"item": "assets/images/wajan.png", "harga": "Rp.50,000", "color": "a"},
+    {
+      "item": "assets/images/ember.png",
+      "harga": 300,
+      "color": "a",
+      "nama": "Ember"
+    },
+    {
+      "item": "assets/images/helm.png",
+      "harga": 1500,
+      "color": "a",
+      "nama": "Helm"
+    },
+    {
+      "item": "assets/images/teflon.png",
+      "harga": 600,
+      "color": "a",
+      "nama": "Teflon"
+    },
+    {
+      "item": "assets/images/tv.png",
+      "harga": 4500,
+      "color": "a",
+      "nama": "Televisi"
+    },
+    {
+      "item": "assets/images/wajan.png",
+      "harga": 500,
+      "color": "a",
+      "nama": "Wajan"
+    },
   ];
   //variabel yang digunakan untuk menyimpan data sementara yang di select
   Map<String, dynamic> item_picked = {};
   //variabel untuk pengkondisian select barang
   bool isTap = false;
+
+  TransactionController trans = Get.put(TransactionController());
+
+  void getPoint() async {
+    poinUser.value += await trans.getTotalPoint();
+    totalSampah.value += await trans.getTotalSampah();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPoint();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +159,12 @@ class _ShopActivityState extends State<ShopActivity> {
           width: MediaQuery.of(context).size.width * 0.8,
           //widget tombol
           child: FloatingActionButton(
-            onPressed: () {
+            onPressed: () async {
+             
               log(item_picked.toString());
               //cek jika data yang dipilih tidak kosong maka dikirim ke halaman penukaran poin
-              if (item_picked.values.isNotEmpty) {
+              if (item_picked.values.isNotEmpty &&
+                  poinUser.value > item_picked['poin']) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -78,8 +173,23 @@ class _ShopActivityState extends State<ShopActivity> {
                             )));
                 Get.snackbar("Transaksi Berhasil", "Poin berhasil ditukar");
                 item_data[item_picked['index']]['color'] = 'a';
-              }else{
-              log(item_picked.toString());
+                //save penukaran
+                await trans.insertPenukaran(
+                    poin: item_picked['poin'],
+                    item: item_picked['nama'],
+                    images: item_picked['image'],
+                    context: context);
+              } else {
+                log(item_picked.toString());
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                    "Saldo tidak mencukupi!",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: "Poppins",
+                        fontSize: 14.sp),
+                  ),
+                ));
               }
             },
             child: Text(
@@ -106,10 +216,11 @@ class _ShopActivityState extends State<ShopActivity> {
                     child: Align(
                         alignment: Alignment.topCenter,
                         //widget card dashboard info jumlah sampah terkumpul
-                        child: DashboardCard(context,
-                            background: Color.fromRGBO(66, 215, 167, 1))),
+                        child: Obx(() => DashboardCard(context,
+                            saldo: poinUser.value,
+                            total_sampah: totalSampah.value,
+                            background: Color.fromRGBO(66, 215, 167, 1)))),
                   ),
-                  
                 ]),
               ),
               Padding(
@@ -149,10 +260,9 @@ class _ShopActivityState extends State<ShopActivity> {
                                 item_data[index]['color'] = 'g';
                                 item_picked['image'] = item_data[index]['item'];
                                 item_picked['index'] = index;
-                                item_picked['poin'] = item_data[index]['harga']
-                                    .toString()
-                                    .split("Rp.")[1];
-                              } 
+                                item_picked['poin'] = item_data[index]['harga'];
+                                item_picked['nama'] = item_data[index]['nama'];
+                              }
                               //kondisi jika klik untuk un-selected item, dengan menghapus data item_picked
                               //ubah warna border ke abu2
                               else {
@@ -168,7 +278,8 @@ class _ShopActivityState extends State<ShopActivity> {
                             //tampilkan data item_data ke widget dalam listView
                             child: ItemStuff(context,
                                 aset: "${item_data[index]['item']}",
-                                label: "${item_data[index]['harga']}",
+                                label:
+                                    "${NumberFormat('#,###').format(item_data[index]['harga'])}",
                                 color: "${item_data[index]['color']}"),
                           ),
                         ),
@@ -208,7 +319,8 @@ class _ShopActivityState extends State<ShopActivity> {
                         padding: EdgeInsets.only(left: 7.w),
                         child: ItemStuff(context,
                             aset: "${item_data3[index]['item']}",
-                            label: "${item_data3[index]['harga']}",
+                            label:
+                                "${NumberFormat('#,###').format(item_data3[index]['harga'])}",
                             color: "${item_data3[index]['color']}"),
                       );
                     }),
@@ -229,7 +341,8 @@ class _ShopActivityState extends State<ShopActivity> {
                         padding: EdgeInsets.only(left: 7.w),
                         child: ItemStuff(context,
                             aset: "${item_data2[index]['item']}",
-                            label: "${item_data2[index]['harga']}",
+                            label:
+                                "${NumberFormat('#,###').format(item_data2[index]['harga'])}",
                             color: "${item_data2[index]['color']}"),
                       );
                     }),

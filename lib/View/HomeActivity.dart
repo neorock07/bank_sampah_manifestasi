@@ -1,13 +1,14 @@
 import 'package:bank_sampah/Partials/Button/HomeButton.dart';
 import 'package:bank_sampah/Partials/Card/DashboardCard.dart';
 import 'package:bank_sampah/ViewModel/HomeChart.dart';
+import 'package:bank_sampah/ViewModel/TransactionController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'dart:developer';
 import '../Partials/Dialog/DialogPop.dart';
 
 class HomeActivity extends StatefulWidget {
@@ -22,11 +23,17 @@ class _HomeActivityState extends State<HomeActivity> {
   HomeChartController chartController = Get.put(HomeChartController());
 
   RxString name = "".obs;
+  dynamic poinUser = 0.obs;
+  dynamic totalSampah = 0.0.obs;
   SharedPreferences? pref;
+  TransactionController trans = Get.put(TransactionController());
+
   //get user akun data dari shared preferences
   Future<void> getUserData() async {
     pref = await SharedPreferences.getInstance();
     name.value = pref!.getString("nama")!;
+    poinUser.value += await trans.getTotalPoint();
+    totalSampah.value += await trans.getTotalSampah();
   }
 
   //menjalaknkan function tersbut saat halaman pertama kali dibuka
@@ -34,6 +41,7 @@ class _HomeActivityState extends State<HomeActivity> {
   void initState() {
     super.initState();
     getUserData();
+    log("hasil home ${poinUser.value}");
   }
 
   @override
@@ -135,7 +143,10 @@ class _HomeActivityState extends State<HomeActivity> {
                       height: 30.h,
                     ),
                     //widget dahsboard informasi jumlah sampah yang terkumpul , dll edit nilai widget ini apabila diperlukan
-                    DashboardCard(context, background: Colors.white),
+                    Obx(() => DashboardCard(context,
+                        saldo: poinUser.value,
+                        total_sampah: totalSampah.value,
+                        background: Colors.white)),
                     SizedBox(
                       height: 5.h,
                     ),
@@ -169,7 +180,7 @@ class _HomeActivityState extends State<HomeActivity> {
                     //button untuk ke berita
                     InkWell(
                       onTap: () {
-                        //pergi ke halaman news 
+                        //pergi ke halaman news
                         Navigator.pushNamed(context, "/news");
                       },
                       child: HomeButton(context,

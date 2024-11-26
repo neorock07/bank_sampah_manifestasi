@@ -209,7 +209,8 @@ class _RegisterActivityState extends State<RegisterActivity> {
                 }),
                 SizedBox(
                   height: 40.h,
-                )
+                ),
+                
               ],
             ),
           ),

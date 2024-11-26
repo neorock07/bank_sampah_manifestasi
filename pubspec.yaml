@@ -111,6 +111,8 @@ flutter:
     - assets/images/man_21.webp
     - assets/images/avatar.png
     - assets/images/not.png
+    
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

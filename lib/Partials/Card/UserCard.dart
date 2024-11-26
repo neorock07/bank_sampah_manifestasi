@@ -35,7 +35,7 @@ Widget UserCard(context,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                name,
+                (name.length > 15)? name.substring(0, 14) : name,
                 style: TextStyle(
                     color: Colors.black,
                     fontFamily: "Poppins",
